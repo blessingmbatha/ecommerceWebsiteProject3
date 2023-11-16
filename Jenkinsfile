@@ -23,11 +23,14 @@ pipeline {
                 sh "mvn clean compile"
             }
         }
-
-        stage('Run Code Test') {
-            steps {
-                sh "mvn test"
-            }
-        }
+        stage('Sonarqube Analysis') {
+        steps {
+             withSonarQubeEnv('sonar-sever') {
+             withMaven(maven:'maven3') {
+             sh 'mvn clean package sonar:sonar'
+                 }
+             }
+          }
+       }
     }
 }
